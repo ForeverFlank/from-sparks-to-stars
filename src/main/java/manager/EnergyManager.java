@@ -1,8 +1,6 @@
-package logic;
+package manager;
 
 import math.BigNum;
-
-import java.util.Optional;
 
 public class EnergyManager {
     private BigNum totalEnergy;

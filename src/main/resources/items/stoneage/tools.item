@@ -1,0 +1,16 @@
+{
+    name = flint_axe
+    displayName = Flint axe
+}
+{
+    name = mud_oven
+    displayName = Mud oven
+}
+{
+    name = clay_oven
+    displayName = Clay oven
+}
+{
+    name = primitive_kiln
+    displayName = Primitive kiln
+}
