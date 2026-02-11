@@ -1,0 +1,44 @@
+{
+    name = fire
+    displayName = Fire
+}
+{
+    name = stick
+    displayName = Stick
+}
+{
+    name = dirt
+    displayName = Dirt
+}
+{
+    name = clay
+    displayName = Clay
+}
+{
+    name = fire_clay
+    displayName = Fire clay
+}
+{
+    name = gravel
+    displayName = Gravel
+}
+{
+    name = sand
+    displayName = Sand
+}
+{
+    name = fresh_water
+    displayName = Fresh water
+}
+{
+    name = sea_water
+    displayName = Sea water
+}
+{
+    name = rock
+    displayName = Rock
+}
+{
+    name = leaf
+    displayName = Leaf
+}

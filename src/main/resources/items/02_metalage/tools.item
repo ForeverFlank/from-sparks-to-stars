@@ -1,0 +1,8 @@
+{
+    name = clay_furnace
+    displayName = Clay Furnace
+}
+{
+    name = primitive_bloomery_furnace
+    displayName = Primitive Bloomery Furnace
+}

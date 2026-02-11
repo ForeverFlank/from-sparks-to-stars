@@ -1,0 +1,34 @@
+{
+    description = Building a charcoal pit
+    input = 16 stick
+    input = 16 leaf
+    output = 1 charcoal_pit
+}
+{
+    description = Charcoal pit
+    input = 1 charcoal_pit keep
+    input = 1 stick
+    output = 0.1 charcoal
+    duration = 60
+}
+{
+    description = Charcoal pit
+    input = 1 charcoal_pit keep
+    input = 1 wood
+    output = 10 charcoal
+    duration = 60
+}
+{
+    description = Charcoal kiln
+    input = 1 charcoal_kiln keep
+    input = 1 stick
+    output = 0.1 charcoal
+    duration = 30
+}
+{
+    description = Charcoal kiln
+    input = 1 charcoal_kiln keep
+    input = 1 wood
+    output = 10 charcoal
+    duration = 30
+}

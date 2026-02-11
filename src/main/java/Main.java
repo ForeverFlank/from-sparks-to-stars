@@ -3,6 +3,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import manager.Game;
 
 public class Main extends Application {
     @Override
@@ -21,6 +22,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        Game.init();
         launch(args);
     }
 }

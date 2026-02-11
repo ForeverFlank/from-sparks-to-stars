@@ -2,7 +2,10 @@ package logic.recipe;
 
 import math.BigNum;
 
-public record RecipeOutput (
-        String itemName,
-        BigNum amount) {
+public abstract class RecipeOutput {
+    public final BigNum quantity;
+
+    public RecipeOutput(BigNum quantity) {
+        this.quantity = quantity;
+    }
 }

@@ -1,12 +1,14 @@
 package manager;
 
 public class Game {
-    private final static Game instance = new Game();
+    private static Game instance;
 
     public final EnergyManager energyManager;
     public final ItemManager itemManager;
+    public final RecipeManager recipeManager;
     public final ResearchManager researchManager;
 
+    public static void init() { instance = new Game(); }
     public static Game getInstance() {
         return instance;
     }
@@ -14,8 +16,7 @@ public class Game {
     private Game() {
         energyManager = new EnergyManager();
         itemManager = new ItemManager();
+        recipeManager = new RecipeManager();
         researchManager = new ResearchManager();
     }
-
-
 }

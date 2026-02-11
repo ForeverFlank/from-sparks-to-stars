@@ -8,6 +8,4 @@ public class Item {
         this.name = name;
         this.displayName = displayName;
     }
-
-
 }

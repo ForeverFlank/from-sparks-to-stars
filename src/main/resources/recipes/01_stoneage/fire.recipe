@@ -1,19 +1,19 @@
 {
     description = Burning fire
-    input = 0.001 fire
-    output = 0.001 energy
-    spontaneous = true
+    input = 1 fire
+    output = 1 energy
+    isAuto = true
     duration = 0
 }
 {
     description = Burning sticks like a caveman
-    input = 0.05 stick
-    output = 0.05 fire
+    input = 1 stick
+    output = 1 fire
     duration = 10
 }
 {
     description = Burning charcoal like an advanced caveman
-    input = 0.1 charcoal
-    output = 3 fire
+    input = 1 charcoal
+    output = 30 fire
     duration = 30
 }
