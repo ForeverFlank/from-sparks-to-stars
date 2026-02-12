@@ -21,6 +21,4 @@ public class RecipeManager {
             recipes.addAll(parsedRecipes);
         }
     }
-
-    // TODO: verify if all recipes use existing items
 }

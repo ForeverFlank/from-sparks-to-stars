@@ -6,6 +6,8 @@ import javafx.scene.text.Text;
 import manager.Game;
 import math.BigNum;
 
+import java.math.RoundingMode;
+
 public class StatusPane extends HBox {
     public final Text energyDisplay;
 
@@ -17,7 +19,12 @@ public class StatusPane extends HBox {
     }
 
     public void update() {
-        BigNum energy = Game.getInstance().energyManager.getTotalEnergy();
-        energyDisplay.setText(energy.formatString());
+        BigNum energy = Game.getInstance().itemManager.getQuantity("energy");
+        energyDisplay.setText(energy.format(
+                3,
+                1e6,
+                RoundingMode.FLOOR,
+                false
+        ));
     }
 }

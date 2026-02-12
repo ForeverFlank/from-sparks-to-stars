@@ -1,5 +1,8 @@
 package math;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class BigNum {
     public final double mantissa;
     public final double exponent;
@@ -26,10 +29,13 @@ public class BigNum {
             return;
         }
 
-        BigNum adjustedExponent = pow10(exponent);
-        BigNum result = adjustedExponent.mul(mantissa);
-        this.mantissa = result.mantissa;
-        this.exponent = result.exponent;
+        double flooredExponent = Math.floor(exponent);
+        double adjustedMantissa = mantissa * Math.pow(10.0, exponent - flooredExponent);
+
+        double shift = Math.floor(Math.log10(Math.abs(adjustedMantissa)));
+
+        this.mantissa = adjustedMantissa / Math.pow(10.0, shift);
+        this.exponent = flooredExponent + shift;
 
         assert !Double.isNaN(this.mantissa);
         assert !Double.isNaN(this.exponent);
@@ -47,7 +53,7 @@ public class BigNum {
         if (rhs.isZero()) return lhs;
 
         BigNum higher = max(lhs, rhs);
-        BigNum lower = max(lhs, rhs);
+        BigNum lower = min(lhs, rhs);
 
         return higher.isNegative()
                 ? addPositiveHigherLhs(higher, lower)
@@ -99,7 +105,7 @@ public class BigNum {
         return mul(this, rhs);
     }
 
-    public BigNum mul(double rhs){
+    public BigNum mul(double rhs) {
         return this.mul(new BigNum(rhs));
     }
 
@@ -186,11 +192,15 @@ public class BigNum {
             return Double.compare(lhs.mantissa, rhs.mantissa);
         }
 
-        return rhs.neg().cmp(lhs.neg());
+        return -lhs.neg().cmp(rhs.neg());
     }
 
     public int cmp(BigNum rhs) {
         return cmp(this, rhs);
+    }
+
+    public int cmp(double rhs) {
+        return cmp(this, new BigNum(rhs));
     }
 
     public static BigNum max(BigNum a, BigNum b) {
@@ -213,8 +223,44 @@ public class BigNum {
         return mantissa < 0.0;
     }
 
-    public String formatString() {
-        return toString();  // TODO: toString but beauty
+
+    public String format(
+            int decimalPlaces,
+            double scientificNotationThreshold,
+            RoundingMode roundingMode,
+            boolean trimDecimals
+    ) {
+        if (cmp(scientificNotationThreshold) < 0) {
+            double value = mantissa * Math.pow(10, exponent);
+            return trimDecimals
+                    ? formatDouble(value, decimalPlaces, roundingMode)
+                    : formatDoubleAndTrim(value, decimalPlaces, roundingMode);
+        }
+
+        String formattedMantissa = formatDouble(mantissa, decimalPlaces, roundingMode);
+        String formattedExponent = String.format("%.0f", exponent);
+        return formattedMantissa + "e" + formattedExponent;
+    }
+
+    private static String formatDouble(
+            double value,
+            int decimalPlaces,
+            RoundingMode roundingMode
+    ) {
+        return BigDecimal.valueOf(value)
+                .setScale(decimalPlaces, roundingMode)
+                .toPlainString();
+    }
+
+    private static String formatDoubleAndTrim(
+            double value,
+            int decimalPlaces,
+            RoundingMode roundingMode
+    ) {
+        return BigDecimal.valueOf(value)
+                .setScale(decimalPlaces, roundingMode)
+                .stripTrailingZeros()
+                .toPlainString();
     }
 
     @Override

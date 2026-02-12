@@ -8,27 +8,27 @@
     description = Charcoal pit
     input = 1 charcoal_pit keep
     input = 1 stick
-    output = 0.1 charcoal
+    output = 1 charcoal
     duration = 60
 }
 {
     description = Charcoal pit
     input = 1 charcoal_pit keep
     input = 1 wood
-    output = 10 charcoal
+    output = 20 charcoal
     duration = 60
 }
 {
     description = Charcoal kiln
     input = 1 charcoal_kiln keep
     input = 1 stick
-    output = 0.1 charcoal
+    output = 1 charcoal
     duration = 30
 }
 {
     description = Charcoal kiln
     input = 1 charcoal_kiln keep
     input = 1 wood
-    output = 10 charcoal
+    output = 20 charcoal
     duration = 30
 }

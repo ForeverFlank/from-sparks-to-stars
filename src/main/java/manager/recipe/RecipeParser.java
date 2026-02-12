@@ -92,11 +92,7 @@ public final class RecipeParser {
         String itemName = parts[1];
         boolean keepItem = parts.length > 2;
 
-        if (itemName.equals("energy")) {
-            return new EnergyRecipeInput(quantity);
-        }
-
-        return new ItemRecipeInput(itemName, quantity, keepItem);
+        return new RecipeInput(itemName, quantity, keepItem);
     }
 
     private static RecipeOutput parseOutput(String value) {
@@ -108,11 +104,7 @@ public final class RecipeParser {
         BigNum quantity = parseBigNum(parts[0]);
         String itemName = parts[1];
 
-        if ("energy".equals(itemName)) {
-            return new EnergyRecipeOutput(quantity);
-        }
-
-        return new ItemRecipeOutput(itemName, quantity);
+        return new RecipeOutput(itemName, quantity);
     }
 
     private static final class RecipeParserState {
