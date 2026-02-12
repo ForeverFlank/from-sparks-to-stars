@@ -8,7 +8,7 @@ public class EnergyManager {
     private BigNum capacity;
 
     public EnergyManager() {
-        energy = new BigNum(200);
+        energy = new BigNum(10);
         capacity = new BigNum(1000);
     }
 

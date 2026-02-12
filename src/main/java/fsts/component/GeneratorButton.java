@@ -7,48 +7,45 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class GeneratorButton extends Button {
+public class GeneratorButton extends HBox {
+
+    private final Button button;
 
     private final GeneratorState generatorState;
     private final Label countText;
-    private final Label costText;
 
     public GeneratorButton(GeneratorState generatorState) {
         this.generatorState = generatorState;
-
-        setPrefSize(150, 50);
-
         GeneratorDefinition definition = generatorState.definition;
 
-        Label nameText = new Label(definition.name);
+        setPrefSize(250, 50);
+
+        Label nameLabel = new Label(definition.name);
+        StackPane nameContainer = new StackPane(nameLabel);
 
         countText = new Label("0");
         StackPane countTextContainer = new StackPane(countText);
         countTextContainer.setMinWidth(50);
         countTextContainer.setPrefWidth(50);
-        countTextContainer.setAlignment(Pos.BASELINE_RIGHT);
+        countTextContainer.setAlignment(Pos.CENTER);
 
-        costText = new Label("0");
-        StackPane costTextContainer = new StackPane(costText);
-        costTextContainer.setMinWidth(50);
-        costTextContainer.setPrefWidth(50);
-        costTextContainer.setAlignment(Pos.BASELINE_RIGHT);
+        button = new Button("0");
+        button.setPrefSize(50, 20);
+        button.setOnAction(_ -> onClick());
+        StackPane buttonContainer = new StackPane(button);
+        buttonContainer.setAlignment(Pos.CENTER);
 
-        HBox hBox = new HBox(countTextContainer, costTextContainer);
-        VBox vBox = new VBox(nameText, hBox);
-
-        setGraphic(vBox);
-
-        setOnAction(_ -> onClick());
+        getChildren().addAll(nameContainer, countTextContainer, buttonContainer);
     }
 
     public void update() {
         countText.setText(generatorState.getCount().format(0, 1e6, true));
-        costText.setText(generatorState.getCost().format(0, 1e6, true));
+        button.setText(generatorState.getCost().format(0, 1e6, true));
     }
 
     private void onClick() {

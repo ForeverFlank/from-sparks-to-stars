@@ -6,8 +6,8 @@ import fsts.math.BigNum;
 public final class CampfireGenerator extends GeneratorDefinition {
 
     private static final String NAME = "Campfire";
-    private static final BigNum BASE_COST = new BigNum(5);
-    private static final BigNum BASE_GENERATION = new BigNum(1);
+    private static final BigNum BASE_COST = new BigNum(10);
+    private static final BigNum BASE_GENERATION = new BigNum(2);
     private static final BigNum COST_SCALING = new BigNum(1.25);
 
     public CampfireGenerator() {
