@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public record BigNum(double mantissa, double exponent) {
+
+    public static final BigNum ZERO = new BigNum(0);
+    public static final BigNum ONE = new BigNum(1);
+
     public BigNum(double num) {
         this(valueOf(num).mantissa, valueOf(num).exponent);
     }
@@ -214,6 +218,10 @@ public record BigNum(double mantissa, double exponent) {
 
     public static BigNum min(BigNum a, BigNum b) {
         return a.cmp(b) == -1 ? a : b;
+    }
+
+    public static BigNum clamp(BigNum value, BigNum min, BigNum max) {
+        return min(max(value, min), max);
     }
 
     public boolean isZero() {

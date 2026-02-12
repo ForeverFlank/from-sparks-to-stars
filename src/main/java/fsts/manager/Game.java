@@ -1,24 +1,22 @@
 package fsts.manager;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
-import fsts.logic.recipe.Recipe;
-import fsts.logic.recipe.RecipeInput;
-import fsts.logic.recipe.RecipeOutput;
-import fsts.manager.item.ItemId;
-import fsts.manager.item.ItemManager;
-import fsts.manager.recipe.RecipeManager;
+import fsts.logic.generator.GeneratorDefinition;
+import fsts.logic.generator.GeneratorState;
 import fsts.math.BigNum;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Game {
     private static Game instance;
 
-    public final ItemManager itemManager;
-    public final RecipeManager recipeManager;
-    public final ResearchManager researchManager;
+    public static double deltaTimeSeconds = 0.05;
+
+    public final EnergyManager energyManager;
+    public final GeneratorManager generatorManager;
     public final TimeManager timeManager;
+    // TODO: research manager: something like a slider for spending some energy into research
 
     public static void init() {
         instance = new Game();
@@ -29,45 +27,30 @@ public class Game {
     }
 
     private Game() {
-        itemManager = new ItemManager();
-        recipeManager = new RecipeManager();
-        researchManager = new ResearchManager();
+        energyManager = new EnergyManager();
+        generatorManager = new GeneratorManager();
         timeManager = new TimeManager();
 
-        itemManager.setAmount(ItemId.ENERGY, new BigNum(10));
-
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.05), _ -> step());
-        Timeline timeline = new Timeline(keyFrame);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        long periodMillis = (long) (deltaTimeSeconds * 1000);
+        scheduler.scheduleAtFixedRate(this::update, 0, periodMillis, TimeUnit.MILLISECONDS);
     }
 
-    public void step() {
-
+    public void update() {
+        for (GeneratorState generator : generatorManager.generatorStates) {
+            GeneratorDefinition definition = generator.definition;
+            BigNum count = generator.getCount();
+            BigNum energyGenerated = definition.baseGeneration.mul(count).mul(timeManager.getDeltaTime());
+            energyManager.addEnergy(energyGenerated);
+        }
     }
 
-    public boolean canUseRecipe(Recipe recipe) {
-        final double EPSILON = 1E-7;
-        for (RecipeInput input : recipe.inputs) {
-            if (!itemManager.hasEnough(input.itemId(), input.amount(), EPSILON)) {
-                return false;
-            }
+    // TODO: (..., BigNum amount) param
+    public void buyGenerator(GeneratorState generatorState) {
+        BigNum cost = generatorState.getCost();
+        if (energyManager.hasEnoughEnergy(cost)) {
+            energyManager.removeEnergy(cost);
+            generatorState.addCount(BigNum.ONE);
         }
-        return true;
-    }
-
-    public boolean useRecipe(Recipe recipe) {
-        if (!canUseRecipe(recipe)) return false;
-
-        for (RecipeInput input : recipe.inputs) {
-            if (input.keepItem()) continue;
-            itemManager.remove(input.itemId(), input.amount());
-        }
-
-        for (RecipeOutput output : recipe.outputs) {
-            itemManager.add(output.itemId(), output.amount());
-        }
-
-        return true;
     }
 }

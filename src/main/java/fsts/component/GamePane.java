@@ -8,24 +8,20 @@ import javafx.util.Duration;
 
 public class GamePane extends BorderPane {
     public final StatusPane statusPane;
-    public final ItemPane itemPane;
-    public final RecipePane recipePane;
+    public final GeneratorPane generatorPane;
 
     public GamePane() {
         statusPane = new StatusPane();
-        itemPane = new ItemPane();
-        recipePane = new RecipePane();
+        generatorPane = new GeneratorPane();
 
         setTop(statusPane);
-        setLeft(itemPane);
-        setCenter(recipePane);
+        setCenter(generatorPane);
 
         KeyFrame keyFrame = new KeyFrame(
-            Duration.seconds(0.1),
+            Duration.seconds(0.05),
             _ -> {
                 statusPane.update();
-                itemPane.update();
-                recipePane.update();
+                generatorPane.update();
             }
         );
         Timeline timeline = new Timeline(keyFrame);

@@ -4,7 +4,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import fsts.manager.Game;
-import fsts.manager.item.ItemId;
 import fsts.math.BigNum;
 
 public class StatusPane extends HBox {
@@ -18,7 +17,10 @@ public class StatusPane extends HBox {
     }
 
     public void update() {
-        BigNum energy = Game.getInstance().itemManager.getAmount(ItemId.ENERGY);
-        energyDisplay.setText(energy.format(1, 1e6, false));
+        BigNum energy = Game.getInstance().energyManager.getEnergy();
+        BigNum capacity = Game.getInstance().energyManager.getCapacity();
+        String energyString = energy.format(1, 1e6, false);
+        String capacityString = capacity.format(1, 1e6, false);
+        energyDisplay.setText(energyString + " / " + capacityString);
     }
 }
