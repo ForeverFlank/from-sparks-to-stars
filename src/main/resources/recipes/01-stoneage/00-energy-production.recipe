@@ -1,0 +1,14 @@
+{
+    name = Stick burning
+    description = Burning sticks like a caveman
+    input = 1 stick
+    output = 1 energy
+    duration = 1
+}
+{
+    name = Charcoal burning
+    description = Burning charcoal like an advanced caveman
+    input = 1 charcoal
+    output = 30 energy
+    duration = 30
+}

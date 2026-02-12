@@ -1,0 +1,16 @@
+{
+    id = stone_axe
+    name = Stone axe
+}
+{
+    id = charcoal_pit
+    name = Charcoal pit
+}
+{
+    id = charcoal_kiln
+    name = Charcoal kiln
+}
+{
+    id = primitive_kiln
+    name = Primitive kiln
+}
