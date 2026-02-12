@@ -1,8 +1,8 @@
 {
-    name = fire
-    displayName = Fire
-}
-{
     name = charcoal
     displayName = Charcoal
+}
+{
+    name = natural_rope
+    displayName = Natural rope
 }

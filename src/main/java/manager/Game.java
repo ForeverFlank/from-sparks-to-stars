@@ -53,6 +53,7 @@ public class Game {
         }
 
         for (RecipeInput input : recipe.inputs) {
+            if (input.keepItem) continue;
             itemManager.remove(input.itemName, input.quantity);
         }
 

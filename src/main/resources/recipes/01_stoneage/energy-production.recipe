@@ -1,19 +1,14 @@
 {
-    description = Burning fire
-    input = 1 fire
-    output = 1 energy
-    isAuto = true
-    duration = 0
-}
-{
+    displayName = Stick burning
     description = Burning sticks like a caveman
     input = 1 stick
-    output = 1 fire
+    output = 1 energy
     duration = 10
 }
 {
+    displayName = Charcoal burning
     description = Burning charcoal like an advanced caveman
     input = 1 charcoal
-    output = 30 fire
+    output = 30 energy
     duration = 30
 }

@@ -4,13 +4,13 @@
 }
 {
     name = charcoal_pit
-    displayName = Charcoal Pit
+    displayName = Charcoal pit
 }
 {
     name = charcoal_kiln
-    displayName = Charcoal Kiln
+    displayName = Charcoal kiln
 }
 {
     name = primitive_kiln
-    displayName = Primitive Kiln
+    displayName = Primitive kiln
 }
