@@ -1,6 +1,6 @@
 package fsts.manager;
 
-import fsts.logic.generator.GeneratorDefinition;
+import fsts.logic.generator.BaseGenerator;
 import fsts.logic.generator.GeneratorState;
 import fsts.math.BigNum;
 
@@ -45,7 +45,7 @@ public class Game {
         BigNum totalEnergy = BigNum.ZERO;
 
         for (GeneratorState generator : generatorManager.generatorStates) {
-            GeneratorDefinition definition = generator.definition;
+            BaseGenerator definition = generator.definition;
             BigNum count = generator.getCount();
             BigNum energyGenerated = definition.baseGeneration.mul(count);
 

@@ -1,6 +1,7 @@
 package fsts.component;
 
 import fsts.logic.generator.GeneratorState;
+import fsts.logic.tier.TechTier;
 import fsts.manager.Game;
 import javafx.scene.layout.VBox;
 
@@ -15,7 +16,10 @@ public class GeneratorPane extends VBox {
         generatorButtons = new ArrayList<>();
 
         for (GeneratorState generator : Game.getInstance().generatorManager.generatorStates) {
-            generatorButtons.add(new GeneratorButton(generator));
+            for (TechTier techTier : TechTier.values()) {
+                if (generator.definition.techTier != techTier) continue;
+                generatorButtons.add(new GeneratorButton(generator));
+            }
         }
 
         getChildren().addAll(generatorButtons);

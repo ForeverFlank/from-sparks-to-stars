@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public final class ResourceUtils {
-    private ResourceUtils() {
+public final class ResourceUtil {
+    private ResourceUtil() {
         // Utility class
     }
 

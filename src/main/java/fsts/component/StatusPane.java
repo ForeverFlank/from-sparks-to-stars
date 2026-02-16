@@ -22,7 +22,7 @@ public class StatusPane extends VBox {
         energyText.setFont(new Font(18));
         StackPane energyTextContainer = new StackPane(energyText);
         energyTextContainer.setPrefWidth(100);
-        energyTextContainer.setAlignment(Pos.CENTER_RIGHT);
+        energyTextContainer.setAlignment(Pos.CENTER_LEFT);
 
         Text slashText = new Text(" / ");
         slashText.setFont(new Font(18));

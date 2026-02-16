@@ -1,6 +1,6 @@
 package fsts.component;
 
-import fsts.logic.generator.GeneratorDefinition;
+import fsts.logic.generator.BaseGenerator;
 import fsts.logic.generator.GeneratorState;
 import fsts.manager.Game;
 import fsts.util.MetricFormatter;
@@ -8,11 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 public class GeneratorButton extends HBox {
 
@@ -23,7 +19,7 @@ public class GeneratorButton extends HBox {
 
     public GeneratorButton(GeneratorState generatorState) {
         this.generatorState = generatorState;
-        GeneratorDefinition definition = generatorState.definition;
+        BaseGenerator definition = generatorState.definition;
 
         setPrefSize(300, 40);
 

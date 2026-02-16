@@ -4,11 +4,11 @@ import fsts.math.BigNum;
 
 public class GeneratorState {
 
-    public final GeneratorDefinition definition;
+    public final BaseGenerator definition;
 
     private BigNum count = BigNum.ZERO;
 
-    public GeneratorState(GeneratorDefinition definition) {
+    public GeneratorState(BaseGenerator definition) {
         this.definition = definition;
     }
 

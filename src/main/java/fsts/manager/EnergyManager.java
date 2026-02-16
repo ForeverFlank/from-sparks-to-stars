@@ -9,7 +9,7 @@ public class EnergyManager {
 
     public EnergyManager() {
         energy = new BigNum(500);
-        capacity = new BigNum(1_000_000);
+        capacity = new BigNum(1E100);
     }
 
     public BigNum getEnergy() {
