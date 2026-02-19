@@ -45,6 +45,9 @@ public class GeneratorButton extends HBox {
     public void update() {
         countText.setText(generatorState.getCount().format(0, 1e6, true));
         button.setText(MetricFormatter.formatPositivePrefixes(generatorState.getCost(), "Wh"));
+
+        boolean canBuy = Game.getInstance().energyManager.hasEnoughEnergy(generatorState.getCost());
+        button.setDisable(!canBuy);
     }
 
     private void onClick() {

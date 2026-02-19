@@ -2,6 +2,7 @@ package fsts.math;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Optional;
 
 public record BigNum(double mantissa, double exponent) {
 
@@ -52,17 +53,29 @@ public record BigNum(double mantissa, double exponent) {
         return new BigNum(mantissa, exponent);
     }
 
+    public Optional<Double> toDouble() {
+        double result = mantissa * Math.pow(10.0, exponent);
+
+        if (Double.isNaN(result)) {
+            return Optional.empty();
+        }
+        return Optional.of(result);
+    }
 
     public static BigNum add(BigNum lhs, BigNum rhs) {
-        if (lhs.isZero()) return rhs;
-        if (rhs.isZero()) return lhs;
+        if (lhs.isZero()) {
+            return rhs;
+        }
+        if (rhs.isZero()) {
+            return lhs;
+        }
 
         BigNum higher = max(lhs, rhs);
         BigNum lower = min(lhs, rhs);
 
         return higher.isPositive()
-               ? addPositiveHigherLhs(higher, lower)
-               : addPositiveHigherLhs(lower.neg(), higher.neg()).neg();
+                ? addPositiveHigherLhs(higher, lower)
+                : addPositiveHigherLhs(lower.neg(), higher.neg()).neg();
     }
 
     private static BigNum addPositiveHigherLhs(BigNum lhs, BigNum rhs) {
@@ -84,7 +97,6 @@ public record BigNum(double mantissa, double exponent) {
         return add(this, new BigNum(rhs));
     }
 
-
     public static BigNum sub(BigNum lhs, BigNum rhs) {
         return BigNum.add(lhs, rhs.neg());
     }
@@ -97,9 +109,10 @@ public record BigNum(double mantissa, double exponent) {
         return this.sub(new BigNum(rhs));
     }
 
-
     public static BigNum mul(BigNum lhs, BigNum rhs) {
-        if (lhs.isZero() || rhs.isZero()) return new BigNum(0);
+        if (lhs.isZero() || rhs.isZero()) {
+            return new BigNum(0);
+        }
 
         double productMantissa = lhs.mantissa * rhs.mantissa;
         double productExponent = lhs.exponent + rhs.exponent;
@@ -114,7 +127,6 @@ public record BigNum(double mantissa, double exponent) {
         return this.mul(new BigNum(rhs));
     }
 
-
     public static BigNum div(BigNum lhs, BigNum rhs) {
         return mul(lhs, rhs.recip());
     }
@@ -126,7 +138,6 @@ public record BigNum(double mantissa, double exponent) {
     public BigNum div(double rhs) {
         return this.div(new BigNum(rhs));
     }
-
 
     public BigNum neg() {
         return new BigNum(-mantissa, exponent);
@@ -140,6 +151,45 @@ public record BigNum(double mantissa, double exponent) {
         return new BigNum(Math.abs(mantissa), exponent);
     }
 
+    public BigNum floor() {
+
+        if (this.isZero()) {
+            return BigNum.ZERO;
+        }
+
+        boolean negative = this.mantissa < 0;
+        double m = Math.abs(this.mantissa);
+        double e = this.exponent;
+
+        if (e < 0) {
+            return negative ? BigNum.ONE.neg() : BigNum.ZERO;
+        }
+
+        double intPart = Math.floor(m);
+        double fracPart = m - intPart;
+
+        BigNum result = new BigNum(intPart, e);
+
+        if (fracPart == 0.0) {
+            return negative ? result.neg() : result;
+        }
+
+        if (fracPart > 0) {
+            int k = (int) Math.min(15, e);
+            double scaled = Math.floor(fracPart * Math.pow(10, k));
+
+            if (scaled != 0) {
+                BigNum fracContribution = new BigNum(scaled, e - k);
+                result = result.add(fracContribution);
+            }
+        }
+
+        if (negative) {
+            return result.neg().sub(BigNum.ONE);
+        }
+
+        return result;
+    }
 
     public static BigNum pow(BigNum base, BigNum exponent) {
         double expValue = exponent.mantissa * Math.pow(10.0, exponent.exponent);
@@ -166,7 +216,6 @@ public record BigNum(double mantissa, double exponent) {
         return BigNum.pow(this, new BigNum(exponent));
     }
 
-
     public static BigNum sqrt(BigNum num) {
         assert !num.isNegative();
         return new BigNum(Math.sqrt(num.mantissa), num.exponent / 2.0);
@@ -175,7 +224,6 @@ public record BigNum(double mantissa, double exponent) {
     public BigNum sqrt() {
         return sqrt(this);
     }
-
 
     public static BigNum log10(BigNum num) {
         assert num.isPositive();
@@ -186,17 +234,22 @@ public record BigNum(double mantissa, double exponent) {
         return log10(this);
     }
 
-
     public static int cmp(BigNum lhs, BigNum rhs) {
         if (lhs.isZero()) {
             return Double.compare(0.0, rhs.mantissa);
         }
 
         if (lhs.isPositive()) {
-            if (!rhs.isPositive()) return 1;
+            if (!rhs.isPositive()) {
+                return 1;
+            }
 
-            if (lhs.exponent > rhs.exponent) return 1;
-            if (lhs.exponent < rhs.exponent) return -1;
+            if (lhs.exponent > rhs.exponent) {
+                return 1;
+            }
+            if (lhs.exponent < rhs.exponent) {
+                return -1;
+            }
 
             return Double.compare(lhs.mantissa, rhs.mantissa);
         }
@@ -210,6 +263,22 @@ public record BigNum(double mantissa, double exponent) {
 
     public int cmp(double rhs) {
         return cmp(this, new BigNum(rhs));
+    }
+
+    public boolean gt(BigNum rhs) {
+        return cmp(this, rhs) > 0;
+    }
+
+    public boolean gte(BigNum rhs) {
+        return cmp(this, rhs) >= 0;
+    }
+
+    public boolean lt(BigNum rhs) {
+        return cmp(this, rhs) < 0;
+    }
+
+    public boolean lte(BigNum rhs) {
+        return cmp(this, rhs) <= 0;
     }
 
     public static BigNum max(BigNum a, BigNum b) {
@@ -240,8 +309,8 @@ public record BigNum(double mantissa, double exponent) {
         if (cmp(eNotationThreshold) < 0) {
             double value = mantissa * Math.pow(10, exponent);
             return trimDecimals
-                   ? formatDoubleAndTrim(value, decimalPlaces)
-                   : formatDouble(value, decimalPlaces);
+                    ? formatDoubleAndTrim(value, decimalPlaces)
+                    : formatDouble(value, decimalPlaces);
         }
 
         String formattedMantissa = formatDouble(mantissa, decimalPlaces);
@@ -251,20 +320,22 @@ public record BigNum(double mantissa, double exponent) {
 
     private static String formatDouble(double value, int decimalPlaces) {
         return BigDecimal.valueOf(value)
-                         .setScale(decimalPlaces, RoundingMode.HALF_UP)
-                         .toPlainString();
+                .setScale(decimalPlaces, RoundingMode.HALF_UP)
+                .toPlainString();
     }
 
     private static String formatDoubleAndTrim(double value, int decimalPlaces) {
         return BigDecimal.valueOf(value)
-                         .setScale(decimalPlaces, RoundingMode.HALF_UP)
-                         .stripTrailingZeros()
-                         .toPlainString();
+                .setScale(decimalPlaces, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof BigNum(double mantissa1, double exponent1))) return false;
+        if (!(obj instanceof BigNum(double mantissa1, double exponent1))) {
+            return false;
+        }
         return mantissa == mantissa1 && exponent == exponent1;
     }
 

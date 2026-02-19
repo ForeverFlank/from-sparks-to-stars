@@ -8,8 +8,12 @@ public class EnergyManager {
     private BigNum capacity;
 
     public EnergyManager() {
-        energy = new BigNum(500);
-        capacity = new BigNum(1E100);
+        energy = new BigNum(1e3);
+        capacity = new BigNum(1e100);
+    }
+
+    public void resetByPrestige() {
+        energy = new BigNum(1e3);
     }
 
     public BigNum getEnergy() {

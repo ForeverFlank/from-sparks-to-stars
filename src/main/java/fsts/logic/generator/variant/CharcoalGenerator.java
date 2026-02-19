@@ -1,4 +1,4 @@
-package fsts.logic.generator.tier2;
+package fsts.logic.generator.variant;
 
 import fsts.logic.generator.BaseGenerator;
 import fsts.logic.tier.TechTier;
@@ -7,8 +7,8 @@ import fsts.math.BigNum;
 public final class CharcoalGenerator extends BaseGenerator {
 
     private static final String NAME = "Charcoal Burning";
-    private static final BigNum BASE_COST = new BigNum(10_000_000);
-    private static final BigNum BASE_GENERATION = new BigNum(100_000);
+    private static final BigNum BASE_COST = new BigNum(1e6);
+    private static final BigNum BASE_GENERATION = new BigNum(1e5);
     private static final BigNum COST_SCALING = new BigNum(1.5);
     private static final TechTier TIER = TechTier.MEDIEVAL;
 

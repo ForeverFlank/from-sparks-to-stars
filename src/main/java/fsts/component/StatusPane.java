@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 public class StatusPane extends VBox {
 
     private final Text energyText;
-    private final Text capacityText;
+    private final Text researchPointText;
     private final Text finalGenerationText;
 
     public StatusPane() {
@@ -24,24 +24,18 @@ public class StatusPane extends VBox {
         energyTextContainer.setPrefWidth(100);
         energyTextContainer.setAlignment(Pos.CENTER_LEFT);
 
-        Text slashText = new Text(" / ");
-        slashText.setFont(new Font(18));
+        researchPointText = new Text("0");
+        researchPointText.setFont(new Font(18));
+        StackPane researchPointTextContainer = new StackPane(researchPointText);
+        researchPointTextContainer.setPrefWidth(100);
+        researchPointTextContainer.setAlignment(Pos.CENTER_LEFT);
 
-        capacityText = new Text("0");
-        capacityText.setFont(new Font(18));
-        StackPane capacityTextContainer = new StackPane(capacityText);
-        capacityTextContainer.setPrefWidth(100);
-        capacityTextContainer.setAlignment(Pos.CENTER_LEFT);
-
-        StackPane slashContainer = new StackPane(slashText);
-        slashContainer.setAlignment(Pos.CENTER);
 
         BorderPane energyStatusContainer = new BorderPane();
         energyStatusContainer.setPrefWidth(200);
         energyStatusContainer.setMaxWidth(200);
         energyStatusContainer.setLeft(energyTextContainer);
-        energyStatusContainer.setCenter(slashContainer);
-        energyStatusContainer.setRight(capacityTextContainer);
+        energyStatusContainer.setRight(researchPointTextContainer);
 
         finalGenerationText = new Text();
 
@@ -50,11 +44,11 @@ public class StatusPane extends VBox {
 
     public void update() {
         BigNum energy = Game.getInstance().energyManager.getEnergy();
-        BigNum capacity = Game.getInstance().energyManager.getCapacity();
+        BigNum researchPoint = Game.getInstance().researchManager.getResearchPoint();
         BigNum finalEnergyGeneration = Game.getInstance().getFinalEnergyGeneration();
 
         energyText.setText(MetricFormatter.formatPositivePrefixes(energy, "Wh"));
-        capacityText.setText(MetricFormatter.formatPositivePrefixes(capacity, "Wh"));
+        researchPointText.setText(researchPoint.format(2, 1e6, false) + " RP");
         finalGenerationText.setText(
             "Generating " + MetricFormatter.formatPositivePrefixes(finalEnergyGeneration, "W"));
     }

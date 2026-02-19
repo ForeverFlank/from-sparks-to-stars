@@ -4,24 +4,28 @@ import fsts.math.BigNum;
 
 public class ResearchManager {
 
-    private BigNum research;
+    private BigNum researchPoint;
     private BigNum capacity;
     private BigNum researchPerEnergy;
     private double researchFraction;
 
     public ResearchManager() {
-        research = new BigNum(0);
-        capacity = new BigNum(1_000);
+        researchPoint = new BigNum(0);
+        capacity = new BigNum(1e100);
         researchPerEnergy = new BigNum(0.01);
         researchFraction = 0.0;
     }
 
-    public BigNum getResearch() {
-        return research;
+    public BigNum getResearchPoint() {
+        return researchPoint;
     }
 
-    public void setResearch(BigNum research) {
-        this.research = BigNum.clamp(research, BigNum.ZERO, capacity);
+    public void setResearchPoint(BigNum researchPoint) {
+        this.researchPoint = BigNum.clamp(researchPoint, BigNum.ZERO, capacity);
+    }
+
+    public void addResearchPoint(BigNum researchPoint) {
+        setResearchPoint(getResearchPoint().add(researchPoint));
     }
 
     public BigNum getCapacity() {

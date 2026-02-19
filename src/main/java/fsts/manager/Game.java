@@ -1,14 +1,15 @@
 package fsts.manager;
 
-import fsts.logic.generator.BaseGenerator;
-import fsts.logic.generator.GeneratorState;
-import fsts.math.BigNum;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import fsts.logic.generator.BaseGenerator;
+import fsts.logic.generator.GeneratorState;
+import fsts.math.BigNum;
+
 public class Game {
+
     private static Game instance;
 
     public static double deltaTimeSeconds = 0.05;
@@ -16,7 +17,7 @@ public class Game {
     public final EnergyManager energyManager;
     public final GeneratorManager generatorManager;
     public final ResearchManager researchManager;
-    public final TimeManager timeManager;
+    public final PrestigeManager prestigeManager;
 
     public static void init() {
         instance = new Game();
@@ -30,7 +31,7 @@ public class Game {
         energyManager = new EnergyManager();
         generatorManager = new GeneratorManager();
         researchManager = new ResearchManager();
-        timeManager = new TimeManager();
+        prestigeManager = new PrestigeManager();
 
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         long periodMillis = (long) (deltaTimeSeconds * 1000);
@@ -38,7 +39,36 @@ public class Game {
     }
 
     public void update() {
-        energyManager.addEnergy(getFinalEnergyGeneration().mul(timeManager.getDeltaTime()));
+        BigNum addedEnergy = getFinalEnergyGeneration().mul(deltaTimeSeconds);
+        energyManager.addEnergy(addedEnergy);
+
+        BigNum addedResearchPoint = getFinalResearchPointGeneration().mul(deltaTimeSeconds);
+        researchManager.addResearchPoint(addedResearchPoint);
+    }
+
+    // TODO: (..., BigNum amount) param
+    public void buyGenerator(GeneratorState generatorState) {
+        BigNum cost = generatorState.getCost();
+
+        if (energyManager.hasEnoughEnergy(cost)) {
+            energyManager.removeEnergy(cost);
+            generatorState.addCount(BigNum.ONE);
+        }
+    }
+
+    public void prestige() {
+        BigNum cost = prestigeManager.getCost();
+
+        if (energyManager.hasEnoughEnergy(cost)) {
+            BigNum buyable = prestigeManager.getMaxPrestige(energyManager.getEnergy());
+            prestigeManager.addPrestige(buyable);
+            resetByPrestige();
+        }
+    }
+
+    public void resetByPrestige() {
+        energyManager.resetByPrestige();
+        generatorManager.resetByPrestige();
     }
 
     public BigNum getTotalEnergyGeneration() {
@@ -51,27 +81,24 @@ public class Game {
 
             totalEnergy = totalEnergy.add(energyGenerated);
         }
-        return totalEnergy;
+
+        return totalEnergy.mul(getGameSpeed());
     }
 
     public BigNum getFinalEnergyGeneration() {
         BigNum totalEnergy = getTotalEnergyGeneration();
+
         return totalEnergy.mul(1.0 - researchManager.getResearchFraction());
     }
 
-    public BigNum getFinalResearchGeneration() {
+    public BigNum getFinalResearchPointGeneration() {
         BigNum totalEnergy = getTotalEnergyGeneration();
         BigNum usedEnergy = totalEnergy.mul(researchManager.getResearchFraction());
+
         return usedEnergy.mul(researchManager.getResearchPerEnergy());
     }
 
-    // TODO: (..., BigNum amount) param
-    public void buyGenerator(GeneratorState generatorState) {
-        BigNum cost = generatorState.getCost();
-        if (energyManager.hasEnoughEnergy(cost)) {
-            energyManager.removeEnergy(cost);
-            generatorState.addCount(BigNum.ONE);
-        }
+    public BigNum getGameSpeed() {
+        return BigNum.pow(1.125, prestigeManager.getPrestige());
     }
-
 }
