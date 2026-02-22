@@ -1,0 +1,8 @@
+Croissius
+
+- Shooting
+- Idle
+- Skills
+- Upgrades
+
+

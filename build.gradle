@@ -34,7 +34,7 @@ javafx {
 }
 
 application {
-    mainClass = 'fsts.Main' // path to your main class
+    mainClass = 'croissius.Main' // path to your main class
 }
 
 run {
